@@ -1,9 +1,8 @@
-const Item = require('../models/Item');
-const Location = require('../models/Location');
+const locationService = require('../services/locationService');
 
 exports.getAllLocations = async (req, res) => {
   try {
-    const locations = await Location.find();
+    const locations = await locationService.getAllLocations();
     res.status(200).json(locations);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -12,7 +11,7 @@ exports.getAllLocations = async (req, res) => {
 
 exports.getLocationById = async (req, res) => {
   try {
-    const location = await Location.findById(req.params.id);
+    const location = await locationService.getLocationById(req.params.id);
     if (!location) {
       return res.status(404).json({ message: 'Location not found' });
     }
@@ -23,24 +22,17 @@ exports.getLocationById = async (req, res) => {
 };
 
 exports.createLocation = async (req, res) => {
-  const { name, address } = req.body;
   try {
-    const newLocation = new Location({ name, address });
-    await newLocation.save();
-    res.status(201).json(newLocation);
+    const location = await locationService.createLocation(req.body);
+    res.status(201).json(location);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
 exports.updateLocation = async (req, res) => {
-  const { name, address } = req.body;
   try {
-    const location = await Location.findByIdAndUpdate(
-      req.params.id,
-      { name, address },
-      { new: true }
-    );
+    const location = await locationService.updateLocation(req.params.id, req.body);
     if (!location) {
       return res.status(404).json({ message: 'Location not found' });
     }
@@ -52,19 +44,9 @@ exports.updateLocation = async (req, res) => {
 
 exports.deleteLocation = async (req, res) => {
   try {
-    const itemsWithLocation = await Item.find({ location_id: req.params.id });
-    if (itemsWithLocation.length > 0) {
-      return res
-        .status(400)
-        .json({ message: 'Cannot delete location associated with items' });
-    }
-
-    const location = await Location.findByIdAndDelete(req.params.id);
-    if (!location) {
-      return res.status(404).json({ message: 'Location not found' });
-    }
+    await locationService.deleteLocation(req.params.id);
     res.status(200).json({ message: 'Location deleted successfully' });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ message: err.message });
   }
 };

@@ -1,6 +1,5 @@
 const cron = require('node-cron');
 const nodemailer = require('nodemailer');
-
 const Item = require('../models/Item');
 
 const transporter = nodemailer.createTransport({
@@ -16,15 +15,12 @@ const createEmailContent = items => {
 };
 
 const checkStockLevels = () => {
-  const recipientEmail =
-    process.env.RECIPIENT_EMAIL || 'recipient-email@gmail.com';
+  const recipientEmail = process.env.RECIPIENT_EMAIL || 'recipient-email@gmail.com';
   const stockThreshold = process.env.STOCK_THRESHOLD || 5;
 
   cron.schedule('0 0 * * *', async () => {
     try {
-      const lowStockItems = await Item.find({
-        quantity: { $lt: stockThreshold },
-      });
+      const lowStockItems = await Item.find({ quantity: { $lt: stockThreshold } });
       if (lowStockItems.length > 0) {
         const mailOptions = {
           from: process.env.EMAIL_USER,
