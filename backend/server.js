@@ -1,0 +1,35 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const dotenv = require('dotenv');
+
+// Load environment variables from .env file
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 5001;
+
+// Middleware
+app.use(bodyParser.json());
+app.use(cors());
+
+// MongoDB connection
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.log(err));
+
+// Routes
+const itemRoutes = require('./routes/items');
+const locationRoutes = require('./routes/locations');
+const authRoutes = require('./routes/auth');
+
+app.use('/api/items', itemRoutes);
+app.use('/api/locations', locationRoutes);
+app.use('/api/auth', authRoutes);
+
+// Start cron job
+const checkStockLevels = require('./cron/checkStock');
+checkStockLevels();
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
