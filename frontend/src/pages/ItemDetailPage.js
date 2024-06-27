@@ -1,8 +1,10 @@
+// src/pages/ItemDetailPage.js
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../utils/axiosConfig';
 import { useParams } from 'react-router-dom';
-import { Paper, Typography, CircularProgress, Box, Divider } from '@mui/material';
+import { Paper, Typography, Box, Divider } from '@mui/material';
 import Notification from '../components/Notification';
+import Spinner from '../components/Spinner';
 
 const ItemDetailPage = () => {
   const { id } = useParams();
@@ -29,22 +31,22 @@ const ItemDetailPage = () => {
   };
 
   if (loading) {
-    return <CircularProgress />;
+    return <Spinner />;
   }
 
   if (!item) {
-    return <Typography variant="h6">Item not found</Typography>;
+    return <Typography data-testid="item-not-found" variant="h6">Item not found</Typography>;
   }
 
   return (
     <Box sx={{ maxWidth: 600, mx: 'auto', mt: 5, p: 3 }}>
       <Paper elevation={3} sx={{ p: 3 }}>
-        <Typography variant="h4" gutterBottom>{item.name}</Typography>
+        <Typography data-testid="item-name" variant="h4" gutterBottom>{item.name}</Typography>
         <Divider />
-        <Typography variant="body1" sx={{ mt: 2 }}>{item.description}</Typography>
-        <Typography variant="body1" sx={{ mt: 2 }}>Quantity: {item.quantity}</Typography>
-        <Typography variant="body1" sx={{ mt: 2 }}>Location: {item.location_id?.name ?? 'No location'}</Typography>
-        <Typography variant="body1" sx={{ mt: 2 }}>Last Updated: {new Date(item.last_updated).toLocaleString()}</Typography>
+        <Typography data-testid="item-description" variant="body1" sx={{ mt: 2 }}>{item.description}</Typography>
+        <Typography data-testid="item-quantity" variant="body1" sx={{ mt: 2 }}>Quantity: {item.quantity}</Typography>
+        <Typography data-testid="item-location" variant="body1" sx={{ mt: 2 }}>Location: {item.location_id?.name ?? 'No location'}</Typography>
+        <Typography data-testid="item-last-updated" variant="body1" sx={{ mt: 2 }}>Last Updated: {new Date(item.last_updated).toLocaleString()}</Typography>
       </Paper>
       {error && <Notification message={error} severity="error" open={open} handleClose={handleClose} />}
     </Box>

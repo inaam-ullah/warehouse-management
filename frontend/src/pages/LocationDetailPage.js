@@ -1,8 +1,10 @@
+// src/pages/LocationDetailPage.js
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../utils/axiosConfig';
 import { useParams } from 'react-router-dom';
-import { Paper, Typography, CircularProgress, Box, Divider } from '@mui/material';
+import { Paper, Typography, Box, Divider } from '@mui/material';
 import Notification from '../components/Notification';
+import Spinner from '../components/Spinner';
 
 const LocationDetailPage = () => {
   const { id } = useParams();
@@ -29,7 +31,7 @@ const LocationDetailPage = () => {
   };
 
   if (loading) {
-    return <CircularProgress />;
+    return <Spinner />;
   }
 
   if (!location) {

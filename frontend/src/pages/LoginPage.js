@@ -36,6 +36,7 @@ const LoginPage = () => {
     <form onSubmit={handleSubmit}>
       <TextField
         label="Username"
+        name="username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         required
@@ -44,6 +45,7 @@ const LoginPage = () => {
       />
       <TextField
         label="Password"
+        name="password"
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
