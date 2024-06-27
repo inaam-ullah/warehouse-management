@@ -1,8 +1,17 @@
 import React, { useContext } from 'react';
-import { AppBar, Toolbar, Button, Typography, Box, IconButton } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+
 import HomeIcon from '@mui/icons-material/Home';
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Typography,
+  Box,
+  IconButton,
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
+import { AuthContext } from '../context/AuthContext';
 
 const Header = () => {
   const { user, logout } = useContext(AuthContext);
@@ -20,7 +29,12 @@ const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <IconButton edge="start" color="inherit" aria-label="home" onClick={() => navigate('/')}>
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="home"
+          onClick={() => navigate('/')}
+        >
           <HomeIcon />
         </IconButton>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>

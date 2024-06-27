@@ -1,11 +1,12 @@
-const request = require('supertest');
-const app = require('../../server');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
+const request = require('supertest');
+
 const Item = require('../../models/Item');
 const Location = require('../../models/Location');
 const User = require('../../models/User');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const app = require('../../server');
 
 let token;
 let locationId;
@@ -13,7 +14,10 @@ let locationId;
 const generateUniqueUsername = () => `testuser_${new Date().getTime()}`;
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+  await mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
 });
 
 beforeEach(async () => {
@@ -27,7 +31,10 @@ beforeEach(async () => {
   await user.save();
   token = jwt.sign({ userId: user._id }, 'secret', { expiresIn: '1h' });
 
-  const location = new Location({ name: 'Test Location', address: '123 Test St' });
+  const location = new Location({
+    name: 'Test Location',
+    address: '123 Test St',
+  });
   await location.save();
   locationId = location._id;
 });
@@ -46,7 +53,7 @@ describe('Item API', () => {
         name: 'Test Item',
         description: 'Test Description',
         quantity: 10,
-        location_id: locationId
+        location_id: locationId,
       });
     expect(res.statusCode).toEqual(201);
     expect(res.body).toHaveProperty('name', 'Test Item');
@@ -57,7 +64,7 @@ describe('Item API', () => {
       name: 'Test Item',
       description: 'Test Description',
       quantity: 10,
-      location_id: locationId
+      location_id: locationId,
     }).save();
 
     const res = await request(app)
@@ -72,7 +79,7 @@ describe('Item API', () => {
       name: 'Test Item',
       description: 'Test Description',
       quantity: 10,
-      location_id: locationId
+      location_id: locationId,
     }).save();
 
     const res = await request(app)
@@ -87,7 +94,7 @@ describe('Item API', () => {
       name: 'Test Item',
       description: 'Test Description',
       quantity: 10,
-      location_id: locationId
+      location_id: locationId,
     }).save();
 
     const res = await request(app)
@@ -97,7 +104,7 @@ describe('Item API', () => {
         name: 'Updated Test Item',
         description: 'Updated Description',
         quantity: 20,
-        location_id: locationId
+        location_id: locationId,
       });
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('name', 'Updated Test Item');
@@ -108,7 +115,7 @@ describe('Item API', () => {
       name: 'Test Item',
       description: 'Test Description',
       quantity: 10,
-      location_id: locationId
+      location_id: locationId,
     }).save();
 
     const res = await request(app)

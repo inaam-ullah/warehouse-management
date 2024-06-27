@@ -1,0 +1,98 @@
+{
+    "env": {
+      "browser": true,
+      "es2021": true,
+      "jest": true
+    },
+    "extends": [
+      "react-app",
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended",
+      "plugin:jsx-a11y/recommended",
+      "plugin:import/errors",
+      "plugin:import/warnings",
+      "plugin:import/typescript",
+      "plugin:prettier/recommended"
+    ],
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "plugins": [
+      "react",
+      "react-hooks",
+      "jsx-a11y",
+      "import",
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": "error",
+      "react/prop-types": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-uses-react": "off",
+      "react/jsx-uses-vars": "error",
+      "react/jsx-key": "error",
+      "react/jsx-no-duplicate-props": "error",
+      "react/jsx-no-undef": "error",
+      "react/jsx-no-useless-fragment": "error",
+      "jsx-a11y/anchor-is-valid": [
+        "error",
+        {
+          "components": ["Link"],
+          "specialLink": ["to"]
+        }
+      ],
+      "import/order": [
+        "error",
+        {
+          "groups": ["builtin", "external", "internal"],
+          "pathGroups": [
+            {
+              "pattern": "react",
+              "group": "external",
+              "position": "before"
+            }
+          ],
+          "pathGroupsExcludedImportTypes": ["react"],
+          "newlines-between": "always",
+          "alphabetize": {
+            "order": "asc",
+            "caseInsensitive": true
+          }
+        }
+      ],
+      "import/no-unresolved": "error",
+      "import/named": "error",
+      "import/default": "error",
+      "import/namespace": "error",
+      "import/no-restricted-paths": "error",
+      "import/no-absolute-path": "error",
+      "import/no-dynamic-require": "error",
+      "import/no-self-import": "error",
+      "import/no-cycle": "error",
+      "import/no-useless-path-segments": "error",
+      "import/no-relative-parent-imports": "error",
+      "import/no-unused-modules": [
+        "error",
+        {
+          "unusedExports": true,
+          "missingExports": true
+        }
+      ]
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      },
+      "import/resolver": {
+        "node": {
+          "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        }
+      }
+    }
+  }
+  

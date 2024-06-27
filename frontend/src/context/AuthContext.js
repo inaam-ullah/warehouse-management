@@ -1,6 +1,8 @@
 // src/context/AuthContext.js
 import React, { createContext, useState, useEffect } from 'react';
+
 import { jwtDecode } from 'jwt-decode';
+
 import Notification from '../components/Notification';
 import Spinner from '../components/Spinner';
 import { logoutUser } from '../utils/authUtils';
@@ -28,7 +30,7 @@ const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const login = (token) => {
+  const login = token => {
     localStorage.setItem('token', token);
     try {
       const decodedUser = jwtDecode(token);
@@ -45,12 +47,12 @@ const AuthProvider = ({ children }) => {
     handleSuccess('Successfully logged out!');
   };
 
-  const handleError = (error) => {
+  const handleError = error => {
     setError(error);
     setOpen(true);
   };
 
-  const handleSuccess = (message) => {
+  const handleSuccess = message => {
     setSuccess(message);
     setOpen(true);
   };
@@ -66,10 +68,26 @@ const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, handleError, handleSuccess }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, handleError, handleSuccess }}
+    >
       {children}
-      {error && <Notification message={error} severity="error" open={open} handleClose={handleClose} />}
-      {success && <Notification message={success} severity="success" open={open} handleClose={handleClose} />}
+      {error && (
+        <Notification
+          message={error}
+          severity="error"
+          open={open}
+          handleClose={handleClose}
+        />
+      )}
+      {success && (
+        <Notification
+          message={success}
+          severity="success"
+          open={open}
+          handleClose={handleClose}
+        />
+      )}
     </AuthContext.Provider>
   );
 };

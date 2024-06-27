@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import axiosInstance from '../utils/axiosConfig';
+
+import {
+  Button,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
+} from '@mui/material';
 import { Link } from 'react-router-dom';
-import { Button, Typography, Grid, Card, CardContent, CardActions } from '@mui/material';
+
 import Notification from './Notification';
+import axiosInstance from '../utils/axiosConfig';
 
 const LocationList = () => {
   const [locations, setLocations] = useState([]);
@@ -12,7 +21,8 @@ const LocationList = () => {
   const [isEmpty, setIsEmpty] = useState(false);
 
   useEffect(() => {
-    axiosInstance.get('/locations')
+    axiosInstance
+      .get('/locations')
       .then(response => {
         if (response.data.length === 0) {
           setIsEmpty(true);
@@ -27,14 +37,16 @@ const LocationList = () => {
       });
   }, []);
 
-  const deleteLocation = async (id) => {
+  const deleteLocation = async id => {
     try {
       await axiosInstance.delete(`/locations/${id}`);
       setLocations(locations.filter(location => location._id !== id));
       setSuccess('Location deleted successfully!');
       setOpen(true);
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'There was an error deleting the location!';
+      const errorMessage =
+        error.response?.data?.message ||
+        'There was an error deleting the location!';
       setError(errorMessage);
       setOpen(true);
     }
@@ -64,17 +76,54 @@ const LocationList = () => {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button component={Link} to={`/locations/${location._id}`} size="small">View</Button>
-                <Button component={Link} to={`/locations/${location._id}/edit`} size="small" color="primary">Edit</Button>
-                <Button size="small" color="secondary" onClick={() => deleteLocation(location._id)}>Delete</Button>
+                <Button
+                  component={Link}
+                  to={`/locations/${location._id}`}
+                  size="small"
+                >
+                  View
+                </Button>
+                <Button
+                  component={Link}
+                  to={`/locations/${location._id}/edit`}
+                  size="small"
+                  color="primary"
+                >
+                  Edit
+                </Button>
+                <Button
+                  size="small"
+                  color="secondary"
+                  onClick={() => deleteLocation(location._id)}
+                >
+                  Delete
+                </Button>
               </CardActions>
             </Card>
           </Grid>
         ))}
       </Grid>
-      {isEmpty && <Typography variant="h6" mt={4}>No locations available.</Typography>}
-      {error && <Notification message={error} severity="error" open={open} handleClose={handleClose} />}
-      {success && <Notification message={success} severity="success" open={open} handleClose={handleClose} />}
+      {isEmpty && (
+        <Typography variant="h6" mt={4}>
+          No locations available.
+        </Typography>
+      )}
+      {error && (
+        <Notification
+          message={error}
+          severity="error"
+          open={open}
+          handleClose={handleClose}
+        />
+      )}
+      {success && (
+        <Notification
+          message={success}
+          severity="success"
+          open={open}
+          handleClose={handleClose}
+        />
+      )}
     </div>
   );
 };

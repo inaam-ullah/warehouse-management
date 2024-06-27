@@ -1,8 +1,9 @@
 // backend/tests/middleware/auth.test.js
-const request = require('supertest');
 const express = require('express');
-const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const request = require('supertest');
+
 const auth = require('../../middleware/auth');
 
 const app = express();
@@ -15,7 +16,9 @@ describe('Auth Middleware', () => {
   let token;
 
   beforeAll(() => {
-    token = jwt.sign({ userId: new mongoose.Types.ObjectId() }, 'secret', { expiresIn: '1h' });
+    token = jwt.sign({ userId: new mongoose.Types.ObjectId() }, 'secret', {
+      expiresIn: '1h',
+    });
   });
 
   test('should return 401 if no token is provided', async () => {

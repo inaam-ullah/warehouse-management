@@ -30,7 +30,9 @@ exports.createItem = async (req, res) => {
 
 exports.updateItem = async (req, res) => {
   try {
-    const updatedItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedItem = await Item.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
     res.json(updatedItem);
   } catch (err) {
     res.status(400).json({ error: err.message });

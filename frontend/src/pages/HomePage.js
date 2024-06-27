@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import axiosInstance from '../utils/axiosConfig';
-import { Typography, Grid, Card, CardContent, CardActions, Button } from '@mui/material';
+
+import {
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+} from '@mui/material';
 import { Link } from 'react-router-dom';
-import Notification from '../components/Notification';
+
 import ItemList from '../components/ItemList';
+import Notification from '../components/Notification';
+import axiosInstance from '../utils/axiosConfig';
 
 const HomePage = () => {
   const [lowStockItems, setLowStockItems] = useState([]);
@@ -53,7 +62,12 @@ const HomePage = () => {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button component={Link} to={`/items/${item._id}`} size="small" data-testid={`view-button-${item._id}`}>
+                    <Button
+                      component={Link}
+                      to={`/items/${item._id}`}
+                      size="small"
+                      data-testid={`view-button-${item._id}`}
+                    >
                       View
                     </Button>
                   </CardActions>
@@ -65,18 +79,37 @@ const HomePage = () => {
       )}
       <Grid container spacing={3} sx={{ mt: 4 }}>
         <Grid item>
-          <Button variant="contained" color="primary" component={Link} to="/items/new" data-testid="add-item-button">
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link}
+            to="/items/new"
+            data-testid="add-item-button"
+          >
             Add New Item
           </Button>
         </Grid>
         <Grid item>
-          <Button variant="contained" color="primary" component={Link} to="/locations/new" data-testid="add-location-button">
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link}
+            to="/locations/new"
+            data-testid="add-location-button"
+          >
             Add New Location
           </Button>
         </Grid>
       </Grid>
       <ItemList />
-      {error && <Notification message={error} severity="error" open={open} handleClose={handleClose} />}
+      {error && (
+        <Notification
+          message={error}
+          severity="error"
+          open={open}
+          handleClose={handleClose}
+        />
+      )}
     </div>
   );
 };

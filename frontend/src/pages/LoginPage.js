@@ -1,10 +1,12 @@
 import React, { useState, useContext } from 'react';
+
+import { TextField, Button } from '@mui/material';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+import Notification from '../components/Notification';
 import config from '../config';
 import { AuthContext } from '../context/AuthContext';
-import { TextField, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import Notification from '../components/Notification';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -14,10 +16,13 @@ const LoginPage = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${config.API_URL}/auth/login`, { username, password });
+      const res = await axios.post(`${config.API_URL}/auth/login`, {
+        username,
+        password,
+      });
       localStorage.setItem('token', res.data.token);
       login(res.data.token);
       navigate('/');
@@ -38,7 +43,7 @@ const LoginPage = () => {
         label="Username"
         name="username"
         value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        onChange={e => setUsername(e.target.value)}
         required
         fullWidth
         margin="normal"
@@ -48,7 +53,7 @@ const LoginPage = () => {
         name="password"
         type="password"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={e => setPassword(e.target.value)}
         required
         fullWidth
         margin="normal"
@@ -59,7 +64,14 @@ const LoginPage = () => {
       <Button color="inherit" onClick={() => navigate('/register')}>
         Register
       </Button>
-      {error && <Notification message={error} severity="error" open={open} handleClose={handleClose} />}
+      {error && (
+        <Notification
+          message={error}
+          severity="error"
+          open={open}
+          handleClose={handleClose}
+        />
+      )}
     </form>
   );
 };
