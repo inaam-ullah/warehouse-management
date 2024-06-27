@@ -11,15 +11,18 @@ const HomePage = () => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    axiosInstance.get('/items')
-      .then(response => {
+    const fetchItems = async () => {
+      try {
+        const response = await axiosInstance.get('/items');
         const lowStock = response.data.filter(item => item.quantity < 5);
         setLowStockItems(lowStock);
-      })
-      .catch(error => {
+      } catch (error) {
         setError('There was an error fetching the items!');
         setOpen(true);
-      });
+      }
+    };
+
+    fetchItems();
   }, []);
 
   const handleClose = () => {
@@ -50,7 +53,9 @@ const HomePage = () => {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button component={Link} to={`/items/${item._id}`} size="small">View</Button>
+                    <Button component={Link} to={`/items/${item._id}`} size="small" data-testid={`view-button-${item._id}`}>
+                      View
+                    </Button>
                   </CardActions>
                 </Card>
               </Grid>
@@ -60,12 +65,12 @@ const HomePage = () => {
       )}
       <Grid container spacing={3} sx={{ mt: 4 }}>
         <Grid item>
-          <Button variant="contained" color="primary" component={Link} to="/items/new">
+          <Button variant="contained" color="primary" component={Link} to="/items/new" data-testid="add-item-button">
             Add New Item
           </Button>
         </Grid>
         <Grid item>
-          <Button variant="contained" color="primary" component={Link} to="/locations/new">
+          <Button variant="contained" color="primary" component={Link} to="/locations/new" data-testid="add-location-button">
             Add New Location
           </Button>
         </Grid>

@@ -1,6 +1,9 @@
+// src/context/AuthContext.js
 import React, { createContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import Notification from '../components/Notification';
+import Spinner from '../components/Spinner';
+import { logoutUser } from '../utils/authUtils';
 
 export const AuthContext = createContext();
 
@@ -19,9 +22,7 @@ const AuthProvider = ({ children }) => {
         setUser(decodedUser);
       } catch (error) {
         console.error('Token decoding error:', error);
-        localStorage.removeItem('token');
-        setUser(null);
-        handleError('Invalid token, please log in again.');
+        logoutUser();
       }
     }
     setLoading(false);
@@ -40,8 +41,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
-    setUser(null);
+    logoutUser();
     handleSuccess('Successfully logged out!');
   };
 
@@ -61,8 +61,12 @@ const AuthProvider = ({ children }) => {
     setSuccess(null);
   };
 
+  if (loading) {
+    return <Spinner />;
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, handleError, handleSuccess }}>
+    <AuthContext.Provider value={{ user, login, logout, handleError, handleSuccess }}>
       {children}
       {error && <Notification message={error} severity="error" open={open} handleClose={handleClose} />}
       {success && <Notification message={success} severity="success" open={open} handleClose={handleClose} />}
