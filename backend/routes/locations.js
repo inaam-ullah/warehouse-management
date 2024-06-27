@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const LocationController = require('../controllers/LocationController');
 const auth = require('../middleware/auth');

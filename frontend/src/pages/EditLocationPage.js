@@ -1,6 +1,8 @@
 import React from 'react';
-import LocationForm from '../components/LocationForm';
+
 import { useParams } from 'react-router-dom';
+
+import LocationForm from '../components/LocationForm';
 
 const EditLocationPage = () => {
   const { id } = useParams();

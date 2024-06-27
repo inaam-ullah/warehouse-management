@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const LocationSchema = new Schema({
   name: { type: String, required: true, unique: true },
-  address: { type: String, required: true }
+  address: { type: String, required: true },
 });
 
 module.exports = mongoose.model('Location', LocationSchema);

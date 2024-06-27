@@ -1,8 +1,9 @@
-const request = require('supertest');
-const mongoose = require('mongoose');
 const express = require('express');
-const app = require('../server');
+const mongoose = require('mongoose');
+const request = require('supertest');
+
 const errorHandler = require('../middleware/errorHandler');
+const app = require('../server');
 
 describe('Server', () => {
   afterAll(async () => {
@@ -22,10 +23,12 @@ describe('Server', () => {
     }
 
     // Mock the connect function to immediately resolve
-    const connectSpy = jest.spyOn(mongoose, 'connect').mockImplementation(() => {
-      console.log('MongoDB connected');
-      return Promise.resolve();
-    });
+    const connectSpy = jest
+      .spyOn(mongoose, 'connect')
+      .mockImplementation(() => {
+        console.log('MongoDB connected');
+        return Promise.resolve();
+      });
 
     await mongoose.connect(process.env.MONGODB_URI);
 
@@ -38,7 +41,9 @@ describe('Server', () => {
   });
 
   test('should handle MongoDB connection error gracefully', async () => {
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
 
     // Close the current connection if open
     if (mongoose.connection.readyState === 1) {
@@ -46,10 +51,12 @@ describe('Server', () => {
     }
 
     // Mock the connect function to reject with an error
-    const connectSpy = jest.spyOn(mongoose, 'connect').mockImplementation(() => {
-      console.error('MongoDB connection error');
-      return Promise.reject(new Error('MongoDB connection error'));
-    });
+    const connectSpy = jest
+      .spyOn(mongoose, 'connect')
+      .mockImplementation(() => {
+        console.error('MongoDB connection error');
+        return Promise.reject(new Error('MongoDB connection error'));
+      });
 
     try {
       await mongoose.connect(process.env.MONGODB_URI);
@@ -67,7 +74,7 @@ describe('Server', () => {
     const PORT = process.env.PORT || 5001;
     const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
 
-    await new Promise((resolve) => {
+    await new Promise(resolve => {
       const server = app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
         server.close(resolve);

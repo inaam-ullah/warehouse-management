@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import config from '../config';
+
 import { TextField, Button } from '@mui/material';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+
 import Notification from '../components/Notification';
+import config from '../config';
 
 const RegisterPage = () => {
   const [username, setUsername] = useState('');
@@ -12,10 +14,13 @@ const RegisterPage = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await axios.post(`${config.API_URL}/auth/register`, { username, password });
+      await axios.post(`${config.API_URL}/auth/register`, {
+        username,
+        password,
+      });
       navigate('/login');
     } catch (err) {
       setError('Error registering');
@@ -33,7 +38,7 @@ const RegisterPage = () => {
         label="Username"
         name="username"
         value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        onChange={e => setUsername(e.target.value)}
         required
         fullWidth
         margin="normal"
@@ -43,7 +48,7 @@ const RegisterPage = () => {
         name="password"
         type="password"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={e => setPassword(e.target.value)}
         required
         fullWidth
         margin="normal"
@@ -51,7 +56,14 @@ const RegisterPage = () => {
       <Button type="submit" variant="contained" color="primary">
         Register
       </Button>
-      {error && <Notification message={error} severity="error" open={open} handleClose={handleClose} />}
+      {error && (
+        <Notification
+          message={error}
+          severity="error"
+          open={open}
+          handleClose={handleClose}
+        />
+      )}
     </form>
   );
 };

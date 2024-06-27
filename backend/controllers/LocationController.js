@@ -33,7 +33,11 @@ exports.createLocation = async (req, res) => {
 
 exports.updateLocation = async (req, res) => {
   try {
-    const updatedLocation = await Location.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedLocation = await Location.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
     res.json(updatedLocation);
   } catch (err) {
     console.error('Error updating location:', err);
