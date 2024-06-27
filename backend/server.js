@@ -3,14 +3,15 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const errorHandler = require('./middleware/errorHandler');
 
 // Load environment variables from .env file
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5001;
 
 // Middleware
+app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -28,8 +29,14 @@ app.use('/api/items', itemRoutes);
 app.use('/api/locations', locationRoutes);
 app.use('/api/auth', authRoutes);
 
-// Start cron job
-const checkStockLevels = require('./cron/checkStock');
-checkStockLevels();
+// Error Handling Middleware
+app.use(errorHandler);
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Export app for testing
+module.exports = app;
+
+// Start server if not in test environment
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 5001;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
