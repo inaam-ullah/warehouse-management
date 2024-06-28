@@ -3,11 +3,13 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const request = require('supertest');
 
+const Item = require('../../models/Item');
 const Location = require('../../models/Location');
 const User = require('../../models/User');
 const app = require('../../server');
 
 let token;
+let location;
 
 const generateUniqueUsername = () =>
   `testuser_${new Date().getTime()}_${Math.random().toString(36).substr(2, 5)}`;
@@ -112,6 +114,45 @@ describe('Location API', () => {
       .set('Authorization', `Bearer ${token}`);
 
     expect(res.statusCode).toEqual(200);
-    expect(res.body).toHaveProperty('message', 'Location deleted');
+    expect(res.body).toHaveProperty('message', 'Location deleted successfully');
+  });
+
+  it('should not delete a location if it is associated with items', async () => {
+    // Create a test item associated with the location
+    location = await Location.create({
+      name: 'Test Location',
+      address: '123 Test St',
+    });
+    await Item.create({
+      name: 'Test Item',
+      description: 'Test',
+      quantity: 10,
+      location_id: location._id,
+    });
+
+    const res = await request(app)
+      .delete(`/api/locations/${location._id}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(400);
+    expect(res.body.message).toBe(
+      'Cannot delete location associated with items'
+    );
+  });
+
+  it('should delete a location if it is not associated with any items', async () => {
+    // Remove the associated item
+    await Item.deleteMany({});
+    location = await Location.create({
+      name: 'Test Location',
+      address: '123 Test St',
+    });
+
+    const res = await request(app)
+      .delete(`/api/locations/${location._id}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body.message).toBe('Location deleted successfully');
   });
 });
