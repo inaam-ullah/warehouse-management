@@ -3,17 +3,18 @@ const request = require('supertest');
 
 const User = require('../../models/User');
 const app = require('../../server');
+const { connectDB, closeDB, clearDB } = require('../utils/db');
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-  await User.deleteMany({});
+  await connectDB();
+});
+
+beforeEach(async () => {
+  await clearDB();
 });
 
 afterAll(async () => {
-  await mongoose.connection.close();
+  await closeDB();
 });
 
 describe('Auth API', () => {
@@ -27,6 +28,11 @@ describe('Auth API', () => {
   });
 
   it('should not register an existing user', async () => {
+    await request(app).post('/api/auth/register').send({
+      username: 'testuser',
+      password: 'testpassword',
+    });
+
     const res = await request(app).post('/api/auth/register').send({
       username: 'testuser',
       password: 'testpassword',
@@ -36,6 +42,11 @@ describe('Auth API', () => {
   });
 
   it('should login an existing user', async () => {
+    await request(app).post('/api/auth/register').send({
+      username: 'testuser',
+      password: 'testpassword',
+    });
+
     const res = await request(app).post('/api/auth/login').send({
       username: 'testuser',
       password: 'testpassword',

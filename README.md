@@ -26,16 +26,44 @@ This is a simple warehouse management web application built with a Node.js backe
 2. Install dependencies:
 ``npm install``
 
-3. Create a .env file in the backend directory and add the following variables:
+3. Create a .env file in the backend directory on root and add the following variables:
 
-```MONGODB_URI=mongodb://localhost:27017/warehouse-management
+```bash
+# MongoDB connection URI
+MONGODB_URI=mongodb://localhost:27017/warehouse-management
+
+# JWT Secret for authentication
 JWT_SECRET=your_jwt_secret
+
+# Email credentials for sending notifications
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_email_password
+
+# Recipient email for low stock alerts
+NOTIFICATION_EMAIL=notification_recipient@gmail.com
+
+# Stock threshold for low stock alerts
+STOCK_THRESHOLD=5
+
+# Port for the server to run on
+PORT=5001
+
+# Node environment
+NODE_ENV=development
+```
+
+4. Create a .env.test file in the backend directory on root and add the following variables:
+
+```bash
+MONGODB_URI=mongodb://localhost:27017/warehouse-management-test
+JWT_SECRET=your_jwt_secret
+PORT=5001
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_email_password
 NOTIFICATION_EMAIL=notification_recipient@gmail.com
 ```
 
-4. Start the backend server: ``npm start``
+5. Start the backend server: ``npm start``
 
 ### Frontend
  1. Navigate to the frontend directory:
